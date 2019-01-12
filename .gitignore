@@ -77,6 +77,8 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+.idea
+
 .gradle/
 build.gradle
 gradle/
