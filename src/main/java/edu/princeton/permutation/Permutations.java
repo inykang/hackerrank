@@ -40,11 +40,10 @@ public class Permutations {
 
     // swap the characters at indices i and j
     private static void swap(char[] a, int i, int j) {
-        System.out.printf("swap(%d,%d): %s => ", i, j, String.valueOf(a));
+        System.out.printf("depth(%d): swap(%d,%d): %s => ",depth, i, j, String.valueOf(a));
         char c = a[i];
         a[i] = a[j];
         a[j] = c;
         System.out.print(String.valueOf(a) + "\n");
     }
-
 }
