@@ -18,14 +18,14 @@ public class NewYearChaosTest {
      */
     @Test
     public void minimumBribes() throws IOException, URISyntaxException {
-        List<String> lines = parseInData("array/nyc-02.data");
+        List<String> lines = parseInData("array/nyc-02-2.data");
         for (int i = 0; i < lines.size(); i++) {
             if (i % 2 != 0) {
                 long s = System.currentTimeMillis();
                 System.out.println("==============================================");
                 NewYearChaos.minimumBribes(convertIntArrays(lines.get(i)));
                 System.out.println(String.format(
-                        "elapsed: %,d",
+                        "elapsed: %,d ms",
                         System.currentTimeMillis() -s
                 ));
             }
