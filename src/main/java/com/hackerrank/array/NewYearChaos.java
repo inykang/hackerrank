@@ -7,12 +7,12 @@ public class NewYearChaos {
         System.out.println(Arrays.toString(q));
 
         List<Integer> forward = new ArrayList<>();
-        Map<Integer, Integer> backward = new HashMap<>();
+        Set<Integer> backward = new HashSet<>();
 
         int len = q.length;
         int count = 0;
 
-        for (int i = 0; i < len -1; i++) {
+        for (int i = 0; i < len - 1; i++) {
             int val = q[i];
             int move = val - i - 1;
 
@@ -23,82 +23,64 @@ public class NewYearChaos {
 
             if (move > 0) {
                 count = count + move;
-                addBackward(forward, backward, move, q[i]);
                 forward.add(val);
+                addBackward(forward, backward, move, val);
+
             } else {
-                int bc = 0;
-                if (backward.get(val) != null) {
-                    bc = backward.get(val);
-                    backward.remove(val);
-                    if (bc + move >= 0) {
-                        forward.add(val);
-                        count = count + bc + move;
-                    }
+                int bc = countBackSteps(forward, val);
+                if (bc + move > 0) {
+                    forward.add(val);
+                    count = count + bc + move;
                 }
-                //forward = arrageForward(forward, backward);
+                backward.remove(new Integer(val));
             }
-
-            if (i > 1)
-            forward.remove(new Integer(i - 1));
-
-            for (Integer v : backward.keySet()) {
-                backward.put(v, backward.get(v) + 1);
-            }
-
-            //countBackward(forward, backward, i, val);
+            pruneForward(forward, backward);
 
             System.out.println(String.format(
-                    "val: %d\nforward: %s\nbackward: %s \nmove: %d, count: %d",
+                    "val: %d\nforward: %s\nbackward: %s\nmove: %d, count: %d",
                     val, forward, backward, move, count
             ));
 
         }
 
         System.out.println("---------");
-
         if (count > 0)
             System.out.println(count);
         else
             System.out.println("Too chaotic");
     }
 
-    private static void addBackward(
-            List<Integer> forward, Map<Integer, Integer> backward, int move, int idx
-    ) {
-        for (int i = idx - 1; i >= move ; i--) {
-            if(!forward.contains(i)) {
-                backward.put(i, 0);
-            }
+    private static void pruneForward(List<Integer> forward, Set<Integer> backward) {
+        int min = minBackward(backward);
+        for (int i = 0; i < forward.size(); i++) {
+            Integer v = forward.get(i);
+            if (v < min) forward.remove(v);
         }
     }
 
-    private static List<Integer> arrageForward(List<Integer> forward, Map<Integer, Integer> backward) {
-        List<Integer> temp = new ArrayList<>();
-
-        for (Integer i : backward.keySet()) {
-            if(forward.contains(i - 1))
-                temp.add(i - 1);
-            if((i - 2) > 0 && forward.contains(i - 2))
-                temp.add(i - 2);
-        }
-        return temp;
-    }
-
-    private static void countBackward(
-            List<Integer> forward, Map<Integer, Integer> backward, int cur, int pos
-    ) {
-        int s = cur - 1;
-        if (s < 0)
-            return;
-        for (int i = s; i < pos; i++) {
-            if (!forward.contains(i)) {
-                Integer itg = backward.get(i);
-                if (itg == null) itg = 1;
-                else itg++;
-                backward.put(i, itg);
-            }
-            forward.remove(new Integer(cur));
+    private static void addBackward(List<Integer> forward, Set<Integer> backward, int move, int val) {
+        for (int i = 0; i < move; i++) {
+            Integer v = val -1 -i;
+            if (!forward.contains(v))
+                backward.add(val - 1 - i);
         }
     }
 
+    private static int minBackward(Set<Integer> backward) {
+        int min = 0;
+        for (Integer i : backward) {
+            if (min == 0 || min > i)
+                min = i;
+        }
+        return min;
+    }
+
+    private static int countBackSteps(List<Integer> forward, int val) {
+        int steps = 0;
+        for (Integer k : forward)
+            if (k >= val)
+                steps = steps + 1;
+
+        return steps;
+    }
 }

@@ -6,19 +6,21 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class NewYearChaosTest {
 
     /**
      * nyc-05.data => 96110
+     * nyc-06.data => 966
+     * nyc-07.data => 96110
      * @throws IOException
      * @throws URISyntaxException
      */
     @Test
     public void minimumBribes() throws IOException, URISyntaxException {
-        List<String> lines = parseInData("array/nyc-02-2.data");
+        List<String> lines = parseInData("array/nyc-07.data");
         for (int i = 0; i < lines.size(); i++) {
             if (i % 2 != 0) {
                 long s = System.currentTimeMillis();
@@ -49,4 +51,5 @@ public class NewYearChaosTest {
                 .collect(Collectors.toList())
                 ;
     }
+
 }
