@@ -31,5 +31,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     testCompile 'org.apache.commons:commons-math3:3.6'
+
+    //Google Guava
+    testCompile 'com.google.guava:guava-collections:r03'
 }
 
