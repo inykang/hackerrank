@@ -20,7 +20,8 @@ public class MinimumSwap2Test {
      */
     @Test
     public void minimumSwaps() throws IOException, URISyntaxException {
-        int swap = MinimumSwap2.minimumSwaps(parseInData("array/minswap-06.data"));
+        int swap = MinimumSwap2.minimumSwaps(parseInData("array/minswap-08" +
+                ".data"));
         System.out.println(swap);
     }
 

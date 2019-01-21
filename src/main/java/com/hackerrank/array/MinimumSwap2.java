@@ -28,6 +28,7 @@ public class MinimumSwap2 {
                 v = nv;
                 swaps ++;
             }
+            idxs[i] = -1;
         }
         return swaps;
     }
