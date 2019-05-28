@@ -18,13 +18,13 @@ public class ArrayManipulationTest {
     @Test
     public void arrayManipulation() throws IOException, InterruptedException {
         long s = System.currentTimeMillis();
-        int n = 10000000, m = 100000; // 02
+        //int n = 10000000, m = 100000; // 02
         //int n = 5, m = 3; // 01
-        //int n = 4, m = 3;  // 03, 882
+        int n = 4, m = 3;  // 03, 882
         //int n = 10, m = 3;  // 04, 10
 
         int[][] queries = new int[m][3];
-        queries = parseInputData(queries, "arrmanip-02.data");
+        queries = parseInputData(queries, "arrmanip-03.data");
 //        for (int i = 0; i < queries.length; i++) {
 //            System.out.println(Arrays.toString(queries[i]));
 //        }
