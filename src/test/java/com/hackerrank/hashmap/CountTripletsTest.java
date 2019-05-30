@@ -77,20 +77,66 @@ public class CountTripletsTest {
     @Test
     public void testFindArr() {
         List<Long> arr =
-                LongStream.of(1, 3, 3, 9, 3, 27)
+                LongStream.of(1, 3, 3, 9, 3, 9, 27)
                         .mapToObj(Long::new)
                         .collect(Collectors.toList());
-        int index = 0;
+        int iIdx = 0, jIdx, pos = 0;
         long min = 1;
         long max = 90;
         long i = min, j, k;
         long r = 3;
+        long count = 0;
+        int index = 0;
 
         do {
             j = i * r;
             k = j * r;
+            System.out.printf("\n[i:%d, j:%d, k:%d]\n", i, j, k);
 
-        } while (k < max);
+            for (int ipos = index; ipos < arr.size(); ipos++) {
+                int iidx = findIndex(arr, ipos, i);
+                if (iidx < 0) break;
+                for (int jpos = iidx + 1; jpos < arr.size(); jpos++) {
+                    int jidx = findIndex(arr, jpos, j);
+                    if (jidx < 0) break;
+                    jpos = jidx;
+                    count += countValue(arr, jidx + 1, k);
+                }
+                ipos = iidx;
+            }
+            System.out.println("count:" + count);
+
+            index ++;
+            i = i * r;
+        } while (k <= max);
+    }
+
+    private long countValue(List<Long> arr, int fromIndex, Long findValue) {
+        long count = 0;
+        for (int i = fromIndex; i < arr.size(); i++) {
+            if (arr.get(i).equals(findValue))
+                count++;
+        }
+        System.out.println(String.format(
+                "from:%d, find:%d, count:%d"
+                , fromIndex, findValue, count
+        ));
+        return count;
+    }
+
+    private int findIndex(List<Long> arr, int fromIndex, Long findValue) {
+        int index = -1;
+        for (int i = fromIndex; i < arr.size(); i++) {
+            if (arr.get(i).equals(findValue)) {
+                index = i;
+                break;
+            }
+        }
+        System.out.println(String.format(
+                "from:%d, find:%d, index:%d"
+                , fromIndex, findValue, index
+        ));
+        return index;
     }
 
     private int nextIndex(Long n, int current, List<Long> arr) {
