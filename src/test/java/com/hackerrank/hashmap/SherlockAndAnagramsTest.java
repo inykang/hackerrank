@@ -19,6 +19,7 @@ public class SherlockAndAnagramsTest {
             int count = SherlockAndAnagrams.sherlockAndAnagrams(s);
             System.out.println(count);
         }
+
     }
 
     private List<String> parseInputData(String fileName) throws IOException {
