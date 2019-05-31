@@ -6,10 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
@@ -22,9 +19,32 @@ public class CountTripletsTest {
         //long ratio = 1L;  //03, 100, 161700
         //long ratio = 1L;  //04, 100000, 166661666700000
         long ratio = 3L; //05, 100000, 3, 2325652489
+        //long ratio = 3L; //06, 6, 3, 6
+        //long ratio = 100L;//07, 1000 100, 0
+        //long ratio = 3L;// 08, 100000 3, 2325652489
+        //long ratio = 100000L;//09, 100000 165427300, 0
         List<Long> arr = parseInputData("cnttrip-05.data");
         long out = CountTriplets.countTriplets(arr, ratio);
         System.out.println("output: " + out);
+    }
+
+    @Test
+    public void testCountOneRatio() {
+        int size = 100;
+        long value = 1;
+        List<Long> arr = Arrays.stream(new long[size])
+                .boxed()
+                //.toArray(Long[]::new)
+                .map(v -> new Long(value))
+                .collect(Collectors.toList());
+        System.out.println(arr);
+
+        int n  = arr.size();
+        long count = 0;
+        for (int i = 1; i <= n - 2; i++) {
+            count += i * (n - i - 1);
+        }
+        System.out.println("count: " + count);
     }
 
     @Test
@@ -39,7 +59,6 @@ public class CountTripletsTest {
                     , i, i * r, i * r * r
             ));
         }
-
     }
 
     @Test
@@ -75,9 +94,28 @@ public class CountTripletsTest {
     }
 
     @Test
+    public void testHashSet() {
+        // Get the HashSet
+        Set<Integer> set = new HashSet<Integer>();
+
+        // fill the hashSet
+        set.add(3);
+        set.add(6);
+        set.add(2);
+        set.add(9);
+
+        System.out.println(String.format(
+                "min: %d, max: %d"
+                , Collections.min(set)
+                , Collections.max(set)
+        ));
+
+    }
+
+    @Test
     public void testFindArr() {
         List<Long> arr =
-                LongStream.of(1, 3, 3, 9, 3, 9, 27)
+                LongStream.of(1, 3, 9, 9, 27, 81)
                         .mapToObj(Long::new)
                         .collect(Collectors.toList());
         int iIdx = 0, jIdx, pos = 0;
@@ -87,6 +125,8 @@ public class CountTripletsTest {
         long r = 3;
         long count = 0;
         int index = 0;
+        arr = arr.stream().filter(n -> (n % r == 0)).collect(Collectors.toList());
+
 
         do {
             j = i * r;
@@ -106,7 +146,7 @@ public class CountTripletsTest {
             }
             System.out.println("count:" + count);
 
-            index ++;
+            index++;
             i = i * r;
         } while (k <= max);
     }

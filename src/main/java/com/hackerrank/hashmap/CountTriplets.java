@@ -1,63 +1,160 @@
 package com.hackerrank.hashmap;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CountTriplets {
-    static long min = 0;
-    static long max = 0;
+    private static List<Long> destination = new ArrayList<>();
+    private static long min = 0;
+    private static long max = 0;
 
     static long countTriplets(List<Long> arr, long r) {
-        arr = cleanArray(arr, r);
-        //long min = Collections.min(arr);
-        //long max = Collections.max(arr);
+        Map<Long, List<Integer>> indexMap = cleanAndIndexMap(arr, r);
 
-        //long i = min;
-        //long j = i * r;
-        //long k = i * r * r;
-
-        long i, j, k;
-        for (i = min; (j = i * r) <= max; i = (k = j * r)) {
-
+        long count = 0;
+        if (r == 1) {
+            count = countOneRatio(indexMap);
+            return count;
         }
 
+        if (indexMap.isEmpty()) return count;
 
-        long out = 0;
+        long i = Collections.min(indexMap.keySet());
+        long j = i * r;
+        long k = j * r;
+        long max = Collections.max(indexMap.keySet());
 
-        return out;
+        while (k <= max) {
+            System.out.printf("\n[i:%d, j:%d, k:%d]\n", i, j, k);
+
+            List<Integer> indicesI = indexMap.get(i);
+            List<Integer> indicesJ = indexMap.get(j);
+            List<Integer> indicesK = indexMap.get(k);
+
+            if (indicesI !=null && indicesJ !=null && indicesK !=null) {
+                for (Integer indexI : indicesI) {
+                    for (Integer indexJ : indicesJ) {
+                        if (indexI < indexJ) {
+                            for (Integer indexK : indicesK) {
+                                if (indexJ < indexK) {
+                                    count += indicesK.size() - indicesK.indexOf(indexK);
+//                                    System.out.println(String.format(
+//                                            "[%d,%d,%d] (%d,%d,%d), %d"
+//                                            , i, j, k, indexI, indexJ, indexK, count
+//                                    ));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.println("count: " + count);
+
+            i = j;
+            j = i * r;
+            k = j * r;
+        }
+
+        return count;
     }
 
-    static int nextIndex(Long n, int current, List<Long> arr) {
-        int index = 0;
-        for (int i = current + 1; i < arr.size(); i++) {
-            if (arr.get(i).equals(n)) {
+     static long countOneRatio(Map<Long, List<Integer>> indexMap) {
+        long count = 0;
+        for (Long key : indexMap.keySet()) {
+            long n = indexMap.get(key).size();
+            for (int i = 0; i < n - 1; i++) {
+                count += i * (n - i - 1);
+            }
+        }
+        return count;
+    }
+
+
+    static Map<Long, List<Integer>> cleanAndIndexMap(List<Long> arr, long r) {
+        arr = arr.stream()
+                .filter(n -> (n == 1) || ((n % r) == 0))
+                .collect(Collectors.toList());
+
+        Map<Long, List<Integer>> indexMap = new HashMap<>();
+        for (int i = 0; i < arr.size(); i++) {
+            Long n = arr.get(i);
+            if (indexMap.keySet().contains(n)) {
+                indexMap.get(n).add(i);
+            } else {
+                List<Integer> indices = new ArrayList<>();
+                indices.add(i);
+                indexMap.put(n, indices);
+            }
+        }
+        return indexMap;
+    }
+
+    static long countTriplets01(List<Long> arr, long r) {
+        for (Long n : arr) {
+            if (n == 1 || n % r == 0) {
+                destination.add(n);
+                if (min == 0 || min > n) min = n;
+                if (max < n) max = n;
+            }
+        }
+
+        long i = min;
+        long j = i * r;
+        long k = j * r;
+        int idx = 0;
+        int length = destination.size();
+        long count = 0;
+        while (k <= max) {
+            System.out.printf("\n[i:%d, j:%d, k:%d]\n", i, j, k);
+            for (int ipos = idx; ipos < length; ipos++){
+                int idxi = findIndex(ipos, i);
+                if (idxi < 0) break;
+                for (int jpos = idxi + 1; jpos < length; jpos++) {
+                    int idxj = findIndex(jpos, j);
+                    if (idxj < 0) break;
+                    jpos = idxj;
+                    count += countValues(idxj + 1, k);
+                }
+                ipos = idxi;
+            }
+            idx ++;
+
+            i = i * r;
+            j = i * r;
+            k = j * r;
+        }
+
+        return count;
+    }
+
+    static long countValues(int fromIndex, long value) {
+        long count = 0;
+        for (int i = fromIndex; i < destination.size(); i++) {
+            if (destination.get(i).equals(value)) {
+                count ++;
+            }
+        }
+        System.out.println(String.format(
+                "from:%d, find:%d, count:%d"
+                , fromIndex, value, count
+        ));
+        return count;
+    }
+
+    static int findIndex(int fromIndex, long findValue) {
+        int index = -1;
+        for (int i = fromIndex; i < destination.size(); i++) {
+            if (destination.get(i).equals(findValue)) {
                 index = i;
                 break;
             }
         }
+        System.out.println(String.format(
+                "from:%d, find:%d, index:%d"
+                , fromIndex, findValue, index
+        ));
         return index;
-    }
-
-    static List<Long> cleanArray(List<Long> arr, long r) {
-        List<Long> cleaned = new ArrayList<>();
-        for (Long v : arr) {
-            if (v == 1 || v % r == 0) {
-                cleaned.add(v);
-                if (min == 0 || min > v) min = v;
-                if (max == 0 || max < v) max = v;
-            }
-        }
-        return cleaned;
-    }
-    static Map<Long, Integer> countDuplicates(List<Long> arr) {
-        Map<Long, Integer> cntArr = new HashMap<>();
-        for (Long v : arr) {
-            if (cntArr.keySet().contains(v))
-                cntArr.put(v, cntArr.get(v) + 1);
-            else
-                cntArr.put(v, 1);
-        }
-
-        return cntArr;
     }
 
     /**
@@ -69,8 +166,6 @@ public class CountTriplets {
         long i = min;
         long j = i * r;
         long k = i * r * r;
-
-
 
         Map<Long, Integer> cntArrMap = countDuplicates(arr);
         long out = 0;
