@@ -9,6 +9,25 @@ public class CountTriplets {
     private static long max = 0;
 
     static long countTriplets(List<Long> arr, long r) {
+        HashMap<Long, Long> map1 = new HashMap<>();
+        HashMap<Long, Long> map2 = new HashMap();
+        long count = 0;
+        for(int i = arr.size() - 1; i >= 0; i--) {
+            long a = arr.get(i);
+            if(map1.containsKey(a*r)) {
+                long c = map1.get(a*r);
+                map2.put(a, map2.getOrDefault(a, 0L) + c);
+            }
+
+            if(map2.containsKey(a*r))
+                count += map2.get(a*r);
+
+            map1.put(a, map1.getOrDefault(a, 0L) + 1);
+        }
+        return count;
+    }
+
+    static long countTriplets02(List<Long> arr, long r) {
         Map<Long, List<Integer>> indexMap = cleanAndIndexMap(arr, r);
 
         long count = 0;
@@ -156,37 +175,4 @@ public class CountTriplets {
         ));
         return index;
     }
-
-    /**
-    static long countTriplets(List<Long> arr, long r) {
-        arr = cleanArray(arr, r);
-        //long min = Collections.min(arr);
-        //long max = Collections.max(arr);
-
-        long i = min;
-        long j = i * r;
-        long k = i * r * r;
-
-        Map<Long, Integer> cntArrMap = countDuplicates(arr);
-        long out = 0;
-        if (cntArrMap.size() == 1) {
-            long n = arr.size();
-            for (long i = 1; i < n - 1; i++) {
-                out += i * (n - i - 1);
-            }
-
-        } else {
-            List<Long> keys = new ArrayList<>(cntArrMap.keySet());
-            Collections.sort(keys);
-            for(Long s : keys) {
-                if (cntArrMap.keySet().contains(s * r)
-                        && cntArrMap.keySet().contains(s * r * r)) {
-                    out += cntArrMap.get(s) * cntArrMap.get(s * r)
-                            * cntArrMap.get(s * r * r);
-                }
-            }
-        }
-        return out;
-    }
-     **/
 }

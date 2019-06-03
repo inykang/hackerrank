@@ -14,16 +14,16 @@ public class CountTripletsTest {
 
     @Test
     public void countTriplets() throws IOException {
-        //long ratio = 2L;  //01, 2
-        //long ratio = 5L;  //02, 4
-        //long ratio = 1L;  //03, 100, 161700
-        //long ratio = 1L;  //04, 100000, 166661666700000
-        long ratio = 3L; //05, 100000, 3, 2325652489
-        //long ratio = 3L; //06, 6, 3, 6
-        //long ratio = 100L;//07, 1000 100, 0
-        //long ratio = 3L;// 08, 100000 3, 2325652489
-        //long ratio = 100000L;//09, 100000 165427300, 0
-        List<Long> arr = parseInputData("cnttrip-05.data");
+        //long ratio = 2L; String cs = "01"; //01, 2
+        long ratio = 5L; String cs = "02";  //02, 4
+        //long ratio = 1L; String cs = "03";  //03, 100, 161700
+        //long ratio = 1L; String cs = "04";  //04, 100000, 166661666700000
+        //long ratio = 3L; String cs = "05"; //05, 100000, 3, 2325652489
+        //long ratio = 3L; String cs = "06"; //06, 6, 3, 6
+        //long ratio = 100L; String cs = "07"; //07, 1000 100, 0
+        //long ratio = 3L; String cs = "08"; // 08, 100000 3, 2325652489
+        //long ratio = 100000L; String cs = "01"; //09, 100000 165427300, 0
+        List<Long> arr = parseInputData("cnttrip-" + cs +".data");
         long out = CountTriplets.countTriplets(arr, ratio);
         System.out.println("output: " + out);
     }
