@@ -1,4 +1,4 @@
-package com.amazone.assessment;
+package com.amz.assessment;
 
 class GCD
 {
@@ -7,7 +7,7 @@ class GCD
     {
         // WRITE YOUR CODE HERE
         int result = arr[0];
-        for (int i = 1; i < n; i++) {
+        for (int i = 1; i < num; i++) {
             result = gcd(arr[i], result);
         }
         return result;
