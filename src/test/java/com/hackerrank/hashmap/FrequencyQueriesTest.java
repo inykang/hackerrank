@@ -18,7 +18,11 @@ public class FrequencyQueriesTest {
 
     @Test
     public void testFreqQuery() throws IOException {
-        String cs = "01";  //100000,
+        //String cs = "01";  //100000,
+        //String cs = "02";  //8,
+        //String cs = "03";  //8
+        // ,
+        String cs = "04";//1000000
         List<List<Integer>> queries = parseInputData("freqqueries-" + cs +".data");
         List<Integer> answers = FrequencyQueries.freqQuery(queries);
         List<Integer> corrAnswers = parseAnswerData("freqqueries-" + cs +".ans");

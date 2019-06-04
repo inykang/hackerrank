@@ -6,70 +6,74 @@ import java.util.List;
 
 public class FrequencyQueries {
     static List<Integer> freqQuery(List<List<Integer>> queries) {
-        //main map, key: x,
-        HashMap<Integer, Integer> valueMap = new HashMap<>();
-
-        //count map, key: count, value: List of x
+        //value, count map
+        HashMap<Integer,Integer> valueMap = new HashMap<>();
+        //count, value list map
         HashMap<Integer, List<Integer>> countMap = new HashMap<>();
-
         //answer list
-        List<Integer> answer = new ArrayList<>();
+        List<Integer> answers = new ArrayList<>();
 
         for (List<Integer> query : queries) {
             Integer operation = query.get(0);
             //insert
-            switch (operation.intValue()) {
-                case 1:
-                    Integer x = query.get(1);
-                    Integer count = valueMap.getOrDefault(x, 0) + 1;
-                    valueMap.put(x, count);
-                    if (countMap.containsKey(count)) {
-                        countMap.get(count).add(x);
-                    } else {
-                        List<Integer> valueList = new ArrayList<>();
-                        valueList.add(x);
-                        countMap.put(count, valueList);
+            if (operation.equals(1)) {
+                Integer x = query.get(1);
+                Integer count = valueMap.getOrDefault(x, 0);
+                Integer newCount = count + 1;
+                valueMap.put(x, newCount);
+                if (countMap.containsKey(count)) {
+                    countMap.get(count).remove(x);
+                    if (countMap.get(count).isEmpty()) {
+                        countMap.remove(count);
                     }
-
-                    count = count - 1;
-                    if (countMap.containsKey(count)) {
-                        countMap.get(count).remove(x);
-                    }
-                    break;
-                case 2:
-                    Integer y = query.get(1);
-                    Integer countY = valueMap.getOrDefault(y, 0);
-                    if (countY > 0L) {
-                        if (countMap.containsKey(countY)) {
-                            countMap.get(countY).remove(y);
-                            countY = countY - 1;
-                            if (countY > 0L) {
-                                if (countMap.containsKey(countY)) {
-                                    countMap.get(countY).add(y);
-                                } else {
-                                    List<Integer> valueList = new ArrayList<>();
-                                    valueList.add(y);
-                                    countMap.put(countY, valueList);
-                                }
-                                valueMap.put(y, valueMap.get(y) + 1);
-                            }
+                }
+                List<Integer> valueList = countMap.get(newCount);
+                if (valueList == null) {
+                    valueList = new ArrayList<>();
+                }
+                valueList.add(x);
+                countMap.put(count + 1, valueList);
+                //delete
+            } else if (operation.equals(2)) {
+                Integer y = query.get(1);
+                Integer count = valueMap.getOrDefault(y, 0);
+                if (count > 0) {
+                    List<Integer> valueList = countMap.get(count);
+                    if (valueList != null) {
+                        valueList.remove(y);
+                        if (valueList.isEmpty()) {
+                            countMap.remove(count);
                         }
                     }
-
-                    break;
-                case 3:
-                    Integer z = query.get(1);
-                    if (countMap.containsKey(z)) {
-                        if (countMap.get(z).isEmpty())
-                            answer.add(0);
-                        else
-                            answer.add(1);
-                    } else {
-                        answer.add(0);
+                    Integer newCount = valueMap.get(y) -1;
+                    valueMap.put(y, newCount);
+                    if (newCount > 0) {
+                        valueList = countMap.get(newCount);
+                        if (valueList ==  null) {
+                            valueList = new ArrayList<>();
+                        }
+                        valueList.add(y);
+                        countMap.put(newCount, valueList);
                     }
-                    break;
+                }
+                //check
+            } else {
+                Integer z = query.get(1);
+                if (countMap.containsKey(z)) {
+                    answers.add(1);
+                } else {
+                    answers.add(0);
+                }
+                //System.out.println("===>" + answers.toString());
             }
+//            System.out.println(String.format(
+//                    "(%d, %d)\n%s\n%s"
+//                    , operation, query.get(1)
+//                    , valueMap.toString()
+//                    , countMap.toString()
+//            ));
         }
-        return answer;
+        return answers;
     }
+
 }
