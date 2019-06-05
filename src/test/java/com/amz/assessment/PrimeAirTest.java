@@ -2,9 +2,7 @@ package com.amz.assessment;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PrimeAirTest {
@@ -54,6 +52,8 @@ public class PrimeAirTest {
                 .map(Arrays::asList)
                 .collect(Collectors.toList());
         System.out.println(forwardRouterList);
+        Set<Character> charSet = new HashSet<>();
+        charSet.toArray();
     }
 
     @Test
