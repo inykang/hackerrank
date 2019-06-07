@@ -12,5 +12,4 @@ public class SuperReducedStringTest {
         String ans = SuperReducedString.superReducedString(s);
         System.out.println(ans);
     }
-
 }
