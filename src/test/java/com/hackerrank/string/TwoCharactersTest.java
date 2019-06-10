@@ -12,5 +12,4 @@ public class TwoCharactersTest {
         int answer = TwoCharacters.alternate(s);
         System.out.println(answer);
     }
-
 }
